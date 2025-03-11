@@ -4,6 +4,8 @@ import io.github.natanimn.BotClient;
 import io.github.natanimn.Webhook;
 import io.github.natanimn.filters.Filter;
 import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -22,6 +24,8 @@ public class TelegramBotService {
     private final boolean useWebhook;
     private final ConfigurableApplicationContext applicationContext;
 
+    private final Logger logger = LoggerFactory.getLogger(TelegramBotService.class);
+
     @Autowired
     public TelegramBotService(BotClient botClient,
                               ExecutorService executorService,
@@ -39,7 +43,7 @@ public class TelegramBotService {
 
     private void setupMessageHandlers() {
         botClient.onMessage(
-                filter -> filter.commands("start"), (context, _) -> context.reply("Добро пожаловать!").exec());
+                filter -> filter.commands("start"), (context, _) -> context.reply("Я люблю тебя, Софа!❤️❤️").exec());
 
         botClient.onMessage(Filter::text, (context, message) -> {
                     String response = "Вы сказали: " + message.text;
@@ -50,6 +54,10 @@ public class TelegramBotService {
 
     @EventListener(ContextRefreshedEvent.class)
     public void startBot() {
+        if (executorService.isShutdown() || executorService.isTerminated()) {
+            return;
+        }
+
         if (useWebhook && webhook.isPresent()) {
             botClient.setWebhook(webhook.get());
         }
@@ -58,11 +66,16 @@ public class TelegramBotService {
             try {
                 botClient.run();
             } catch (Exception e) {
-                System.err.println("Ошибка при запуске бота: " + e.getMessage());
-                applicationContext.close();
+                if (!Thread.currentThread().isInterrupted() && !executorService.isShutdown()) {
+                    logger.error("Error while creating DageBot {}", e.getMessage(), e);
+                    applicationContext.close();
+                } else {
+                    logger.info("DageBot has been terminated");
+                }
             }
         });
     }
+
 
     @PreDestroy
     public void stopBot() {
