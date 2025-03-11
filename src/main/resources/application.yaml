@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: "DageBot"
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/markdb"
+    username: "user"
+    password: "example"
+  jpa:
+    generate-ddl: true
+    show-sql: true
+
+server:
+  port: 8081
+
+telegram:
+  token: "${DAGEBOT_TOKEN}"
+  use-webhook: false
