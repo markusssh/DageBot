@@ -4,9 +4,11 @@ import io.github.natanimn.BotClient;
 import io.github.natanimn.Webhook;
 import io.github.natanimn.enums.ParseMode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,6 +18,9 @@ public class TelegramBotConfig {
 
     @Value("${telegram.token}")
     private String botToken;
+
+    @Value("${telegram.username}")
+    private String botUsername;
 
     @Value("${telegram.use-webhook:false}")
     private boolean useWebhook;
@@ -28,6 +33,9 @@ public class TelegramBotConfig {
 
     @Value("${telegram.webhook.path:/telegram/webhook}")
     private String webhookPath;
+
+    @Value("${telegram.max-activities:3}")
+    private int maxActivities;
 
     @Bean
     public BotClient botClient() {
@@ -53,5 +61,16 @@ public class TelegramBotConfig {
         return Executors.newSingleThreadExecutor();
     }
 
+    public String getBotUsername() {
+        return botUsername;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
 }
 

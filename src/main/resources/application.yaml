@@ -8,10 +8,15 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
+  messages:
+    basename: messages
+    encoding: UTF-8
 
 server:
   port: 8081
 
 telegram:
+  username: "@Dage59Bot"
   token: "${DAGEBOT_TOKEN}"
   use-webhook: false
+  max-activities: 3
