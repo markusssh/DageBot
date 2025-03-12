@@ -1,6 +1,6 @@
 package dev.markusssh.dagebot.telegram.ui;
 
-import dev.markusssh.dagebot.telegram.TelegramBotConfig;
+import dev.markusssh.dagebot.telegram.BotConfig;
 import io.github.natanimn.types.InlineKeyboardButton;
 import io.github.natanimn.types.InlineKeyboardMarkup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeyboardService {
 
-    private final TelegramBotConfig config;
+    private final BotConfig config;
 
     @Autowired
-    public KeyboardService(TelegramBotConfig config) {
+    public KeyboardService(BotConfig config) {
         this.config = config;
     }
 

@@ -4,17 +4,19 @@ import io.github.natanimn.BotClient;
 import io.github.natanimn.Webhook;
 import io.github.natanimn.enums.ParseMode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.ClassPathResource;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
-public class TelegramBotConfig {
+public class BotConfig {
 
     @Value("${telegram.token}")
     private String botToken;
@@ -70,6 +72,9 @@ public class TelegramBotConfig {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:messages");
         messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setCommonMessages(new YamlPropertiesFactoryBean() {{
+            setResources(new ClassPathResource("messages.yml"));
+        }}.getObject());
         return messageSource;
     }
 }
