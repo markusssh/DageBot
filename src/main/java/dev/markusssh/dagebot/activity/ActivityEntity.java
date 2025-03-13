@@ -14,25 +14,43 @@ public class ActivityEntity {
 
     @Column(name = "activity_name", length = 50, nullable = false)
     private String name;
-
     @Column(name = "activity_start", nullable = false)
     private LocalDateTime start;
-
     @Column(name = "activity_end", nullable = false)
     private LocalDateTime end;
-
-    @Column(name = "group_chat", nullable = false)
-    private String groupChat;
-
-    @Column(name = "activity_owner", nullable = false)
-    private String owner;
-
-    @Column(name = "activity_members", nullable = false)
-    @ElementCollection
-    private ArrayList<String> members;
-
     @Column(name = "activity_max_members", nullable = false)
     private int maxMembers;
+    @Column(name = "activity_member", nullable = false)
+    @ElementCollection
+    private ArrayList<String> members = new ArrayList<>();
+
+    @Column(name = "owner_id")
+    private long ownerId;
+    @Column(name = "group_id")
+    private long groupId;
+    @Column(name = "view_message_id")
+    private long viewMessageId;
+
+    public ActivityEntity() {
+    }
+
+    public ActivityEntity(String name,
+                          LocalDateTime start,
+                          LocalDateTime end,
+                          int maxMembers,
+                          long ownerId,
+                          long groupId,
+                          long viewMessageId,
+                          String ownerUsername) {
+        this.name = name;
+        this.start = start;
+        this.end = end;
+        this.maxMembers = maxMembers;
+        this.ownerId = ownerId;
+        this.groupId = groupId;
+        this.viewMessageId = viewMessageId;
+        this.members.add("@" + ownerUsername);
+    }
 
     public long getId() {
         return id;
@@ -50,19 +68,23 @@ public class ActivityEntity {
         return end;
     }
 
-    public String getGroupChat() {
-        return groupChat;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
     public ArrayList<String> getMembers() {
         return members;
     }
 
     public int getMaxMembers() {
         return maxMembers;
+    }
+
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public long getViewMessageId() {
+        return viewMessageId;
     }
 }

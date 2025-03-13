@@ -13,8 +13,16 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7.4
+    container_name: dage-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - "8080:8080"

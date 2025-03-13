@@ -11,12 +11,16 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
+  data:
+    redis:
+      host: "localhost"
+      port: 6379
 
 server:
   port: 8081
 
 telegram:
-  username: "@Dage59Bot"
+  username: "Dage59Bot"
   token: "${DAGEBOT_TOKEN}"
   use-webhook: false
   max-activities: 3

@@ -28,4 +28,16 @@ public class KeyboardService {
         return markup;
     }
 
+    public InlineKeyboardMarkup getNoChatExceptionKeyboardMarkup() {
+        String botUsername = config.getBotUsername();
+
+        var button = new InlineKeyboardButton("🔗 Открыть бота");
+        button.url("t.me/" + botUsername + "?start=0");
+
+        var markup = new InlineKeyboardMarkup();
+        markup.addKeyboard(button);
+
+        return markup;
+    }
+
 }
